@@ -48,7 +48,6 @@ public class SimpleDictionaryTest {
 
     @Test
     public void testIsWord() {
-        // TODO(you): Add some tests!
         assertTrue(dictionary.isWord("dance"));
         assertFalse(dictionary.isWord("don"));
         assertFalse(dictionary.isWord("mee"));
@@ -61,5 +60,12 @@ public class SimpleDictionaryTest {
         assertEquals(dictionary.getAnyWordStartingWith("no"), "north");
         assertEquals(dictionary.getAnyWordStartingWith("m"), "math");
         assertEquals(dictionary.getAnyWordStartingWith("th"), null);
+    }
+
+    @Test
+    public void testGetGoodWordStartingWith() {
+        assertEquals(dictionary.getGoodWordStartingWith("d"), "dance");
+        assertEquals(dictionary.getGoodWordStartingWith("m"), "mouth");
+        assertEquals(dictionary.getGoodWordStartingWith("no"), "north");
     }
 }

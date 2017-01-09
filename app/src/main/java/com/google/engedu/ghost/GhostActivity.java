@@ -58,15 +58,31 @@ public class GhostActivity extends AppCompatActivity {
             toast.show();
         }
 
-        // TODO(you): Handle Bundle savedInstanceState
-        onStart(null);
-    }
+        if (savedInstanceState == null) {
+            onStart(null);
+        } else {
+            boolean userTurn = savedInstanceState.getBoolean(KEY_USER_TURN);
+            if (userTurn) {
+                this.userTurn = Players.PLAYER;
+            } else {
+                this.userTurn = Players.COMPUTER;
+            }
+            currentWord = savedInstanceState.getString(KEY_CURRENT_WORD);
+            String status = savedInstanceState.getString(KEY_SAVED_STATUS);
+            ((TextView) findViewById(R.id.ghostText)).setText(currentWord);
+            ((TextView) findViewById(R.id.gameStatus)).setText(status);
+        }
 
+        // TODO a button for user to do challenge
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(KEY_USER_TURN, userTurn == Players.PLAYER);
+        outState.putString(KEY_CURRENT_WORD, currentWord);
+        outState.putString(KEY_SAVED_STATUS,
+                ((TextView) findViewById(R.id.gameStatus)).getText().toString());
         super.onSaveInstanceState(outState);
-        // TODO(you): Handle onSaveInstanceState
     }
 
     @Override

@@ -24,9 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
+import java.util.Set;
 
 public class SimpleDictionary implements GhostDictionary {
     private static final String TAG = "SampleDictionary";
@@ -90,13 +92,12 @@ public class SimpleDictionary implements GhostDictionary {
         while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
             String word = words.get(mid);
-            String temp = word.substring(0, prefix.length());
-            if (prefix.compareTo(word) < 0 && !temp.equals(prefix)) {
-                hi = mid - 1;
-            } else if (prefix.compareTo(word) > 0 && !temp.equals(prefix)) {
-                lo = mid + 1;
-            } else {
+            if (word.startsWith(prefix)) {
                 return word;
+            } else if (prefix.compareTo(word) < 0) {
+                hi = mid - 1;
+            } else if (prefix.compareTo(word) > 0) {
+                lo = mid + 1;
             }
         }
         return null;
@@ -113,30 +114,55 @@ public class SimpleDictionary implements GhostDictionary {
      */
     @Override
     public String getGoodWordStartingWith(String prefix) {
-//        String selected = null;
-//        int lo = 0;
-//        int hi = words.size() - 1;
-//
-//        while (lo <= hi) {
-//            int mid = lo + (hi - lo) / 2;
-//            selected = words.get(mid);
-//            String temp = selected.substring(0, prefix.length());
-//            if (prefix.compareTo(selected) < 0 && !temp.equals(prefix)) {
-//                hi = mid - 1;
-//            } else if (prefix.compareTo(selected) > 0 && !temp.equals(prefix)) {
-//                lo = mid + 1;
-//            } else if ((selected.length() - temp.length()) % 2 != 0) {
-//                // TODO where to move from here?
-//                lo = mid + 1;
-//            } else {
-//                return selected;
-//            }
-//        }
-//        return selected;
+        String selected = null;
+        int lo = 0;
+        int hi = words.size() - 1;
+        int mid = 0;
 
-        return getAnyWordStartingWith(prefix);
+        // search for any word
+        while (lo <= hi) {
+            mid = lo + (hi - lo) / 2;
+            selected = words.get(mid);
+            if (selected.startsWith(prefix)) {
+                break;
+            } else if (prefix.compareTo(selected) < 0) {
+                hi = mid - 1;
+            } else if (prefix.compareTo(selected) > 0) {
+                lo = mid + 1;
+            }
+        }
+
+        if (lo > hi) {
+            return null;
+        }
+
+        return isGoodWord(prefix, mid);
     }
 
+    private String isGoodWord(String prefix, int index) {
+        int left = index;
+        int right = index;
+        int wordsSize = words.size();
+        String selected = null;
+
+        while (left >= 0) {
+            selected = words.get(left);
+            if (selected.startsWith(prefix) && (selected.length() - prefix.length()) % 2 == 0) {
+                return selected;
+            }
+            left--;
+        }
+
+        while (right < wordsSize) {
+            selected = words.get(right);
+            if (selected.startsWith(prefix) && ((selected.length() - prefix.length()) % 2 == 0)) {
+                return selected;
+            }
+            right ++;
+        }
+        
+        return selected;
+    }
 
     /**
      * Returns the index of the specified key in the specified array.
