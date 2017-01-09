@@ -53,15 +53,26 @@ public class SimpleDictionary implements GhostDictionary {
 
     /**
      * isWord determines whether the argument `word` is present in the dictionary.
-     *
-     * TODO(you): Improve performance above and beyond the naive {@link java.util.List#contains} method.
-     *
      * @param word
      * @return true if the word is in the dictionary, false otherwise.
      */
     @Override
     public boolean isWord(String word) {
-        return words.contains(word);
+        int lo = 0;
+        int hi = words.size() - 1;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            String temp = words.get(mid);
+            if (word.compareTo(temp) < 0) {
+                hi = mid - 1;
+            } else if (word.compareTo(temp) > 0) {
+                lo = mid + 1;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -72,8 +83,22 @@ public class SimpleDictionary implements GhostDictionary {
      * @return
      */
     @Override
-    public String getAnyWordStartingWith(String prefix) throws NoSuchElementException {
-        // TODO(you): Implement using Binary Search
+    public String getAnyWordStartingWith(String prefix) {
+        int lo = 0;
+        int hi = words.size() - 1;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            String word = words.get(mid);
+            String temp = word.substring(0, prefix.length());
+            if (prefix.compareTo(word) < 0 && !temp.equals(prefix)) {
+                hi = mid - 1;
+            } else if (prefix.compareTo(word) > 0 && !temp.equals(prefix)) {
+                lo = mid + 1;
+            } else {
+                return word;
+            }
+        }
         return null;
     }
 
@@ -82,15 +107,34 @@ public class SimpleDictionary implements GhostDictionary {
      * that prefix, or null if no word in the dictionary starts with that prefix.
      *
      * What defines a "good" starter word is left to the implementer.
-     *
+     * good = even number of remaining letters
      * @param prefix
      * @return
      */
     @Override
     public String getGoodWordStartingWith(String prefix) {
-        String selected = null;
-        // TODO(you): Implement using Binary Search + some special magic
-        return selected;
+//        String selected = null;
+//        int lo = 0;
+//        int hi = words.size() - 1;
+//
+//        while (lo <= hi) {
+//            int mid = lo + (hi - lo) / 2;
+//            selected = words.get(mid);
+//            String temp = selected.substring(0, prefix.length());
+//            if (prefix.compareTo(selected) < 0 && !temp.equals(prefix)) {
+//                hi = mid - 1;
+//            } else if (prefix.compareTo(selected) > 0 && !temp.equals(prefix)) {
+//                lo = mid + 1;
+//            } else if ((selected.length() - temp.length()) % 2 != 0) {
+//                // TODO where to move from here?
+//                lo = mid + 1;
+//            } else {
+//                return selected;
+//            }
+//        }
+//        return selected;
+
+        return getAnyWordStartingWith(prefix);
     }
 
 

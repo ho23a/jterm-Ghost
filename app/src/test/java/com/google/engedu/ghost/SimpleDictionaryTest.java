@@ -18,6 +18,7 @@ package com.google.engedu.ghost;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,19 +26,40 @@ import java.util.Arrays;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class SimpleDictionaryTest {
+    SimpleDictionary dictionary;
+
+    @Before
+    public void setUp() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("dance");
+        list.add("done");
+        list.add("math");
+        list.add("mouth");
+        list.add("north");
+
+        dictionary = new SimpleDictionary(list, 0);
+    }
 
     @Test
     public void testIsWord() {
         // TODO(you): Add some tests!
+        assertTrue(dictionary.isWord("dance"));
+        assertFalse(dictionary.isWord("don"));
+        assertFalse(dictionary.isWord("mee"));
     }
 
     @Test
     public void testGetAnyWordStartingWith() {
-        // TODO(you): Add some tests!
+        assertEquals(dictionary.getAnyWordStartingWith("don"), "done");
+        assertEquals(dictionary.getAnyWordStartingWith("mee"), null);
+        assertEquals(dictionary.getAnyWordStartingWith("no"), "north");
+        assertEquals(dictionary.getAnyWordStartingWith("m"), "math");
+        assertEquals(dictionary.getAnyWordStartingWith("th"), null);
     }
 }
