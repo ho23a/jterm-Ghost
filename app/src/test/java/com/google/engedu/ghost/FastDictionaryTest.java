@@ -16,6 +16,7 @@
 
 package com.google.engedu.ghost;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -28,13 +29,41 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class FastDictionaryTest {
+
+    FastDictionary dictionary;
+
+    @Before
+    public void setUp() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("dance");
+        list.add("done");
+        list.add("math");
+        list.add("mouth");
+        list.add("north");
+
+        dictionary = new FastDictionary(list);
+    }
+
     @Test
     public void testIsWord() {
-        // TODO(you): Add some tests!
+        assertTrue(dictionary.isWord("dance"));
+        assertFalse(dictionary.isWord("don"));
+        assertFalse(dictionary.isWord("mee"));
     }
 
     @Test
     public void testGetAnyWordStartingWith() {
-        // TODO(you): Add some tests!
+        assertEquals(dictionary.getAnyWordStartingWith("don"), "done");
+        assertEquals(dictionary.getAnyWordStartingWith("mee"), null);
+        assertEquals(dictionary.getAnyWordStartingWith("no"), "north");
+        assertEquals(dictionary.getAnyWordStartingWith("m"), "math");
+        assertEquals(dictionary.getAnyWordStartingWith("th"), null);
+    }
+
+    @Test
+    public void testGetGoodWordStartingWith() {
+        assertEquals(dictionary.getGoodWordStartingWith("d"), "dance");
+        assertEquals(dictionary.getGoodWordStartingWith("m"), "mouth");
+        assertEquals(dictionary.getGoodWordStartingWith("no"), "north");
     }
 }

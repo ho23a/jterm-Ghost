@@ -136,10 +136,10 @@ public class SimpleDictionary implements GhostDictionary {
             return null;
         }
 
-        return isGoodWord(prefix, mid);
+        return getRemainingGoodWord(prefix, mid);
     }
 
-    private String isGoodWord(String prefix, int index) {
+    private String getRemainingGoodWord(String prefix, int index) {
         int left = index;
         int right = index;
         int wordsSize = words.size();

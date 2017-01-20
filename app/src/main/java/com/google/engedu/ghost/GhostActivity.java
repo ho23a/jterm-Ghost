@@ -73,8 +73,11 @@ public class GhostActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.gameStatus)).setText(status);
         }
 
-        // TODO a button for user to do challenge
+        // TODO a challenge button for user
+        // TODO a restart button that calls onStart()
     }
+
+    // TODO get fun word for an easier game
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
